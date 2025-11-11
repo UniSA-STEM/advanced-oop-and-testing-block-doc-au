@@ -7,18 +7,17 @@ Username: COCNJ001
 This is my own work as defined by the University's Academic Misconduct Policy.
 """
 
-class Enclosures:
-    def __init__(self, name, size, environment_type, cleanliness, compatible_species, currently_contains, animal_count, is_open_for_business):
+class Enclosure:
+    def __init__(self, name, size, environment_type):
         self.__name = name
         self.__size = size
         self.__environment_type = environment_type
         self.__cleanliness = 100
-        self.__compatible_species = self.list_compatible_species()
-        self.__currently_contains = self.currently_contains()
         self.__animal_count = 0
         self.__is_open_for_business = True
 
     # initialise getters and setters
+
     #GETTERS
     def get_name(self):
         return self.__name
@@ -49,23 +48,9 @@ class Enclosures:
         if name is not None:
             self.__name = name
 
-    def set_size(self, size):
-        if size > 0:
-            self.__size = size
-
-    def set_environment_type(self, environment_type):
-        pass
-        if environment_type is not None:
-            self.__environment_type = environment_type
-
-    def set_cleanliness(self, cleanliness):
+       def set_cleanliness(self, cleanliness):
         if cleanliness >= 0 and cleanliness <= 100:
             self.__cleanliness = cleanliness
-
-    def set_compatible_species(self, compatible_species):
-        pass
-        if compatible_species is not None:
-            self.__compatible_species = compatible_species
 
     def set_currently_contains(self, currently_contains):
         pass
@@ -81,12 +66,21 @@ class Enclosures:
         pass
 
 
+    # Properties
+    name = property(get_name, set_name)
+    size = property(get_size)
+    environment_type = property(get_environment_type)
+    cleanliness = property(get_cleanliness, set_cleanliness)
+    compatible_species = property(get_compatible_species)
+    currently_contains = property(get_currently_contains, set_currently_contains)
+    animal_count = property(get_animal_count)
+    is_open_for_business = property(get_is_open_for_business, set_is_open_for_business)
+
+
     #Initialisaton methods to populate lists
     def list_compatible_species(self):
         pass
 
-    def currently_contains(self):
-        pass
 
     #CLASS METHODS
 
@@ -95,7 +89,3 @@ class Enclosures:
 
     def list_animals(self):
         pass
-
-
-
-
