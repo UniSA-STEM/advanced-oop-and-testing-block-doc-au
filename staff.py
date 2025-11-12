@@ -74,21 +74,61 @@ class Staff:
 
 
 class Veterinarian(Staff):
-    def __init__(self, name, animals_can_treat):
-        Staff.__init__(self, name)
+    def __init__(self, name, date_employed, animals_can_treat):
+        Staff.__init__(self, name, date_employed)
+        self.__name = name
+        self.__date_employed = date_employed
         self.__responsibilities = ["health checks", "treat animals", "move animals", "assign enclosure"]
         self.__animals_can_treat = animals_can_treat
 
+    # GETTERS
+
+    def get_name(self):
+        return self.__name
+
+    def get_responsibilities(self):
+        return self.__responsibilities
+
+    def get_is_active_staff(self):
+        return self.__is_active_staff
+
+    def get_date_employed(self):
+        return self.__date_employed
+
+    def get_animals_can_treat(self):
+        return self.__animals_can_treat
+
+
+    # SETTERS
+    def set_name(self, name):
+        if name is not None:
+            self.__name = name
+
+    def set_animals_can_treat(self, animals_can_treat):
+        if animals_can_treat is not None:
+            self.__animals_can_treat.append(animals_can_treat)
+
+
+    def set_is_active_staff(self, is_active_staff):
+        self.__is_active_staff = is_active_staff
+
+    # Properties
+    name = property(get_name, set_name)
+    responsibilities = property(get_responsibilities)
+    is_active_staff = property(get_is_active_staff, set_is_active_staff)
+    date_employed = property(get_date_employed)
+    animals_can_treat = property(get_animals_can_treat, set_animals_can_treat)
+
 
 class Zookeeper(Staff):
-    def __init__(self, name, animals_can_manage):
-        Staff.__init__(self, name)
+    def __init__(self, name, date_employed, animals_can_manage):
+        Staff.__init__(self, name, date_employed)
         self.__responsibilities = ["move animals", "feed animals", "clean enclosures", "assign enclosure"]
         self.__animals_can_manage = animals_can_manage
 
 class Operations(Staff):
-    def __init__(self, name):
-        Staff.__init__(self, name)
+    def __init__(self, name, date_employed):
+        Staff.__init__(self, name, date_employed)
         self.__responsibilities = ["operations"]
 
 

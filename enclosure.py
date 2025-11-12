@@ -48,7 +48,7 @@ class Enclosure:
         if name is not None:
             self.__name = name
 
-       def set_cleanliness(self, cleanliness):
+    def set_cleanliness(self, cleanliness):
         if cleanliness >= 0 and cleanliness <= 100:
             self.__cleanliness = cleanliness
 

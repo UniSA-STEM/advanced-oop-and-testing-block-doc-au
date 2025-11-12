@@ -6,9 +6,11 @@ ID: 110484750
 Username: COCNJ001
 This is my own work as defined by the University's Academic Misconduct Policy.
 """
+from collections.abc import async_generator
+
 
 class Animals:
-    def __init__(self, name, species, age   ):
+    def __init__(self, name, species, age):
         self.__name = name
         self.__species = species
         self.__age = age
@@ -17,6 +19,8 @@ class Animals:
         self.__on_display = True
         # self.__dietary_needs = self.assign_diet_for_species()
         # self.__environmental_needs = self.assign_environmental_needs()
+
+
 
     # Define GETTERS
     def get_name(self):
@@ -67,7 +71,11 @@ class Animals:
         pass
 
     def eat(self):
-        pass
+        print("About to eat...")
+        self.__health += 10
+        if self.__health > 100:
+            self.__health = 100
+        print(f"{self.__name} has eaten! Health is now {self.__health}%\n")
 
     def sleep(self):
         pass
@@ -75,9 +83,17 @@ class Animals:
 
 class Mammal(Animals):
     def __init__(self, name, species, age, dietary_needs, suitable_environment):
-        super().__init__(self, name, species, age)
+        super().__init__(name, species, age)
+        # self.__age = age
         self.__dietary_needs = dietary_needs
         self.__suitable_environment = suitable_environment
+
+    def __str__(self):
+        return_string = f"{self.name} is a {self.species.title()}, in the mammal group.\n"
+        return_string += f" They are {self.age} years old, and health level is at {self.health}%\n"
+        return_string += f"They eat {self.__dietary_needs} and live in a {self.__suitable_environment}.\n"
+        return_string += f"Being treated = {self.being_treated}, and on display = {self.on_display}"
+        return return_string
 
     # Define GETTERS
     def get_dietary_needs(self):
@@ -93,9 +109,16 @@ class Mammal(Animals):
 
 class Fish(Animals):
     def __init__(self, name, species, age, dietary_needs):
-        super().__init__(self, name, species, age)
+        super().__init__(name, species, age)
         self.__dietary_needs = dietary_needs
         self.__suitable_environment = "aquarium"
+
+    def __str__(self):
+        return_string = f"\n{self.name} is a {self.species.title()}, in the aquatic/fish group.\n"
+        return_string += f"They are {self.age} years old, and health level is at {self.health}%\n"
+        return_string += f"They eat {self.__dietary_needs} and live in a {self.__suitable_environment}.\n"
+        return_string += f"Being treated = {self.being_treated}, and on display = {self.on_display}"
+        return return_string
 
     # Define GETTERS
     def get_dietary_needs(self):
@@ -106,6 +129,14 @@ class Fish(Animals):
 
     dietary_needs = property(get_dietary_needs)
     suitable_environment = property(get_suitable_environment)
+
+    def eat(self):
+        print("\nAbout to eat...")
+        self.health += 10
+        if self.health > 100:
+            self.health = 100
+        print(f"{self.name} has eaten! Health is now {self.health}%\n")
+
 
 
 class Reptiles(Animals):
