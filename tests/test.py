@@ -3,7 +3,7 @@ import enclosure
 import staff
 import pytest
 
-from animal import Mammal
+from animal import Mammals, Birds, ALLOWABLE_FOODS, REGISTERED_ANIMALS
 from staff import Veterinarian
 
 
@@ -17,9 +17,11 @@ def create_Vet2():
 
 @pytest.fixture
 def create_Animal1():
-    return Mammal("Dave the Donkey","donkey", 5, ["vegetables", "grass"],"savannah")
+    return Mammals("Zane the Zebra","zebra", 5, ["vegetables", "grass"],"savannah")
 
-
+@pytest.fixture
+def create_Animal2():
+    return Birds("Mark the Macaw","macaw", 7, ["fruit", "meat"])
 
 
 
@@ -35,7 +37,15 @@ def test_veterinarian2(create_Vet2):
 def test_animal1(create_Animal1):
     assert create_Animal1.health == 100
     assert create_Animal1.age == 5
-    assert create_Animal1.name == "Dave the Donkey"
+    assert create_Animal1.name == "Zane the Zebra"
     assert "meat" not in create_Animal1.dietary_needs
+    assert create_Animal1.make_sound() == "Zane the Zebra whinnies !"
+
+def test_animal2(create_Animal2):
+    given_foods = create_Animal2.dietary_needs
+    for food in given_foods:
+        assert food in ALLOWABLE_FOODS
+    assert create_Animal2.species in REGISTERED_ANIMALS
+
 
 

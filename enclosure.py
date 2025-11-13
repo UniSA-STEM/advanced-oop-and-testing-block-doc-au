@@ -6,9 +6,36 @@ ID: 110484750
 Username: COCNJ001
 This is my own work as defined by the University's Academic Misconduct Policy.
 """
+MAX_HEALTH = 100
+MAX_CLEANLINESS = 100
+MAX_ZOO_SIZE = 1000
+MAX_SAVANNAH = 250
+MAX_CAGE = 25
+MAX_AMPHIBIOUS = 40
+MAX_AQUARIUM = 20
+MAX_TERRARIUM = 10
+CURRENT_ZOO_SPACE = 0
+
 
 class Enclosure:
     def __init__(self, name, size, environment_type):
+        if CURRENT_ZOO_SPACE + size > MAX_ZOO_SIZE:
+            raise ValueError("Enclosure size is too big to fit in whats left of the zoo grounds")
+        if environment_type == "savannah":
+            if size > MAX_SAVANNAH:
+                raise ValueError(f"This savananah is above allowable size of {MAX_SAVANNAH}")
+        if environment_type == "cage":
+            if size > MAX_CAGE:
+                raise ValueError(f"This cage is above allowable size of {MAX_CAGE}")
+        if environment_type == "amphibious":
+            if size > MAX_AMPHIBIOUS:
+                raise ValueError(f"This amphibious environment is above allowable size of {MAX_AMPHIBIOUS}")
+        if environment_type == "aquarium":
+            if size > MAX_AQUARIUM:
+                raise ValueError(f"This aquarium is above allowable size of {MAX_AQUARIUM}")
+        if environment_type == "terrarium":
+            if size > MAX_SAVANNAH:
+                raise ValueError(f"This terrarium is above allowable size of {MAX_TERRARIUM}")
         self.__name = name
         self.__size = size
         self.__environment_type = environment_type
