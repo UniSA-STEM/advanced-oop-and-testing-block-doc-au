@@ -41,8 +41,7 @@ class Animals:
             for item in dietary_needs:
                if item not in suitable_foods:
                    raise ValueError(f"{item} is not a food option suitable for a {species}")
-        else:
-            print("Just 1 food item in list...")
+        else: # not a list of suitable foods but a single item
             if dietary_needs not in suitable_foods:
                 raise ValueError(f"{dietary_needs} is not a food option suitable for a {species}")
         if age <= 0:
@@ -55,6 +54,7 @@ class Animals:
         self.__illness = {}
         self.__injuries = {}
         self.__behavioural_problems = {}
+        self.__current_enclosure = None
         self.__being_treated = False
         self.__on_display = False
 
@@ -70,6 +70,9 @@ class Animals:
 
     def get_age(self):
         return self.__age
+
+    def get_current_enclosure(self):
+        return self.__current_enclosure
 
     def get_dietary_needs(self):
         return self.__dietary_needs
@@ -97,6 +100,9 @@ class Animals:
         if name is not None:
             self.__name = name
 
+    def set_current_enclosure(self, current_enclosure):
+        self.__current_enclosure = current_enclosure
+
     def set_health(self, health):
         self.__health = health
 
@@ -120,6 +126,7 @@ class Animals:
     name = property(get_name, set_name)
     species = property(get_species)
     age = property(get_age)
+    current_enclosure = property(get_current_enclosure, set_current_enclosure)
     dietary_needs = property(get_dietary_needs)
     health = property(get_health, set_health)
     illness = property(get_illness, set_illness)
@@ -136,17 +143,17 @@ class Animals:
         self.__health += 10
         if self.__health > 100:
             self.__health = 100
-        return f"{self.__name} has eaten! Health is now {self.__health}%\n"
+        print(f"{self.__name} has eaten! Health is now {self.__health}%\n")
 
     def sleep(self):
         # print("\nAbout to sleep...")
         self.__health += 20
         if self.__health > 100:
             self.__health = 100
-        return f"{self.__name} has slept! Health is now {self.__health}%\n"
+        print(f"{self.__name} has slept! Health is now {self.__health}%\n")
 
     def make_sound(self):
-        return "\nCould be any sound..."
+        print("\nCould be any sound...")
 
     def return_animal_type(self):
         for species, group in REGISTERED_ANIMALS.items():
@@ -240,9 +247,10 @@ class Mammals(Animals):
         self.__suitable_environment = suitable_environment
 
     def __str__(self):
-        return_string = f"\n{self.name} is a {self.species}, in the mammal group.\n"
-        return_string += f"They are {self.age} years old, and health level is at {self.health}%\n"
+        return_string = Fore.YELLOW + f"\n{self.name} is a {self.species}, in the mammal group.\n"
+        return_string += Style.RESET_ALL + f"They are {self.age} years old, and health level is at {self.health}%\n"
         return_string += f"{self.name} eats : {self.dietary_needs} and lives in a {self.suitable_environment}.\n"
+        return_string += f"Currently located in : {self.current_enclosure}\n"
         return_string += f"STATUS :\nHealth = {self.health}%, being treated = {self.being_treated}, and on display = {self.on_display}"
         return return_string
 
@@ -274,8 +282,8 @@ class Fish(Animals):
         self.__suitable_environment = "aquarium"
 
     def __str__(self):
-        return_string = f"\n{self.name} is a {self.species}, in the aquatic/fish group.\n"
-        return_string += f"They are {self.age} years old, and health level is at {self.health}%\n"
+        return_string = Fore.YELLOW + f"\n{self.name} is a {self.species}, in the aquatic & fish group.\n"
+        return_string += Style.RESET_ALL + f"They are {self.age} years old, and health level is at {self.health}%\n"
         return_string += f"They eat {self.dietary_needs} and live in a {self.__suitable_environment}.\n"
         return_string += f"STATUS :\nHealth = {self.health}%, being treated = {self.being_treated}, and on display = {self.on_display}"
         return return_string
@@ -298,8 +306,8 @@ class Reptiles(Animals):
         self.__suitable_environment = "terrarium"
 
     def __str__(self):
-        return_string = f"\n{self.name} is a {self.species}, in the reptile group.\n"
-        return_string += f"They are {self.age} years old, and health level is at {self.health}%\n"
+        return_string = Fore.YELLOW + f"\n{self.name} is a {self.species}, in the reptile group.\n"
+        return_string += Style.RESET_ALL + f"They are {self.age} years old, and health level is at {self.health}%\n"
         return_string += f"They eat {self.dietary_needs} and live in a terrarium.\n"
         return_string += f"STATUS :\nHealth = {self.health}%, being treated = {self.being_treated}, and on display = {self.on_display}"
         return return_string
@@ -312,7 +320,7 @@ class Reptiles(Animals):
     suitable_environment = property(get_suitable_environment)
 
     def make_sound(self):
-        return f"{self.name} goes 'hiss'.\n"
+        print( f"{self.name} goes 'hiss'.\n")
 
 
 class Birds(Animals):
@@ -321,8 +329,8 @@ class Birds(Animals):
         self.__suitable_environment = "cage"
 
     def __str__(self):
-        return_string = f"\n{self.name} is a {self.species}, in the bird group.\n"
-        return_string += f"They are {self.age} years old, and health level is at {self.health}%\n"
+        return_string = Fore.YELLOW + f"\n{self.name} is a {self.species}, in the bird group.\n"
+        return_string += Style.RESET_ALL + f"They are {self.age} years old, and health level is at {self.health}%\n"
         return_string += f"They eat {self.dietary_needs} and live in a cage (sadly).\n"
         return_string += f"STATUS :\nHealth = {self.health}%, being treated = {self.being_treated}, and on display = {self.on_display}"
         return return_string
@@ -337,7 +345,7 @@ class Birds(Animals):
     suitable_environment = property(get_suitable_environment)
 
     def make_sound(self):
-        return f"{self.name} goes 'cheep cheep' !"
+        print(f"{self.name} goes 'cheep cheep' !")
 
 
 

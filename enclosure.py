@@ -157,7 +157,7 @@ class Enclosure:
     def assign_animal(self, animal):
         animal_group = animal.return_animal_type()
         environs = animal.confirm_poss_environs()
-        print(f"Trying to place a {animal_group} usually enclosed in {environs}.")
+        print(f"Attempting to place a {animal_group} usually enclosed in {environs}.")
         print(f"This environment is a {self.environment_type}.")
         if self.is_open_for_business == False:
             raise ValueError("This enclosure is not open for business.")
@@ -175,6 +175,7 @@ class Enclosure:
         self.__population.append(animal)
         self.animal_count += 1
         animal.on_display = True
+        animal.current_enclosure = self.name
         if self.animal_count > 0:
             for animal in self.population:
                 animal.health -= 10
@@ -183,20 +184,8 @@ class Enclosure:
             self.is_open_for_business = False
 
 
-    def remove_animal(self, animal):
-        animal_group = animal.return_animal_type()
-        environs = animal.confirm_poss_environs()
-        print(f"Trying to remove a {animal_group} usually enclosed in {environs}.")
-        print(f"This environment is a {self.environment_type}.")
 
-        if self.animal_count == 0:
-            if animal.species != self.current_species:
-                raise ValueError(f"Sorry - you cant place a {animal.species} in an enclosure with a {self.current_species}.")
-        else:
-            self.current_species = animal.species
-        self.__population.append(animal)
-        self.animal_count += 1
-        animal.on_display = True
+
 
 
 

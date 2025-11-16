@@ -16,16 +16,16 @@ from animal import *
 from enclosure import *
 from staff import *
 
-#   Constants and globalS
+# Constants and global variable for this class
 MAX_HEALTH = 100
 MAX_CLEANLINESS = 100
+ZOO_STAFF = []
 
-
-
+# MAIN class report functions
 
 
 def print_zoo_occupants():
-    print(f"The specific animal are...")
+    print(f"The specific animals currently in the zoo are...")
     for occupants in ZOO_OCCUPANTS:
         print(occupants)
     if len(ZOO_OCCUPANTS) == 0:
@@ -45,71 +45,180 @@ def list_animals_by_species():
     print(f"\nTotal zoo occupants is {len(ZOO_OCCUPANTS)}\n")
 
 def list_all_enclosures():
+    print(Style.RESET_ALL)
     if len(ADDED_ENCLOSURES) == 0:
         print("No enclosures added to our zoo as yet...")
     else:
         for enclosure in ADDED_ENCLOSURES:
             total_open_enclosures = 0
-            print(f"'{enclosure.name}")
+            print(f"'{enclosure.name}'")
             print(enclosure)
 
+def health_report_for_zoo():
+    print(Fore.RED + f"\nHEALTH REPORT for the Zoo...")
+    for animal in ZOO_OCCUPANTS:
+        print(Fore.WHITE + f"{animal.name} - {animal.species} in enclosure '{animal.current_enclosure}'")
+        print(Fore.BLUE + f"Health : {animal.health}%")
+        print(f"Illnesses : {animal.illness}")
+        print(f"Injuries : {animal.injuries}")
+        print(f"Behavioural problems :  : {animal.behavioural_problems}")
+        print(f"Is under treatment : {animal.being_treated}")
+        print(f"Is on display : {animal.on_display}")
+        print("-------------------------------\n")
+    print(Style.RESET_ALL)
 
-# BASIC testing code... to be removed
 
 
-print("---------------------------")
-print("    Welcome to our Zoo!    ")
-print("---------------------------\n")
+# BASIC testing code... a 'walk-through'
 
-print("Initially the zoo is empty...")
+
+print(Fore.GREEN + "--------------------------")
+print("    Welcome to my Zoo!    ")
+print("--------------------------\n")
+print(Style.RESET_ALL)
+
+print("Initially the zoo is empty... ie... ")
 print_zoo_occupants()
 
-print(f"Now enlisting staff to manage the zoo or to move, allocate and fee animals...\n")
+# STAFF added and tested
+print(Fore.BLUE + f"\nNow enlisting staff to manage the zoo or to move, allocate and feed animals...\n")
+print(Style.RESET_ALL)
 vet1 = Veterinarian("Dr Chris", datetime.datetime(2020, 1, 26), ["zebra", "penguin", "seal", "dolphin", "meerkat", "chimpanzee", "snake"])
+ZOO_STAFF.append(vet1)
+print(vet1)
 keeper1 = Zookeeper("Bob the Zookeeper", "20/01/2020", ["zebra", "penguin", "seal", "dolphin", "meerkat", "chimpanzee", "lion", "tiger"])
-print("Now procuring some critters for our zoo...")
+print(keeper1)
+ZOO_STAFF.append(keeper1)
+admin1 = Operations("Jeff the Janitor", datetime.datetime(2019, 12, 24))
+print(admin1)
+ZOO_STAFF.append(admin1)
+
+print(Fore.BLUE + "Now procuring some critters for our zoo...")
+print(Style.RESET_ALL)
 
 zebra1 = Mammals("Zane the Zebra", "zebra", 10, ["grass", "vegetables"], "savannah")
 ZOO_OCCUPANTS.append(zebra1)
+zebra2 = Mammals("Zoe the Zebra", "zebra", 8, ["grass", "vegetables"], "savannah")
+ZOO_OCCUPANTS.append(zebra2)
+zebra3 = Mammals("Ziggy the Zebra", "zebra", 20, ["grass", "vegetables"], "savannah")
+ZOO_OCCUPANTS.append(zebra3)
+zebra4 = Mammals("Zilda the Zebra", "zebra", 16, ["grass", "vegetables"], "savannah")
+ZOO_OCCUPANTS.append(zebra4)
+zebra5 = Mammals("Zeek the Zebra", "zebra", 14, ["grass", "vegetables"], "savannah")
+ZOO_OCCUPANTS.append(zebra5)
+fish1 = Fish("Sam the Shark", "shark", 15, "fish")
+ZOO_OCCUPANTS.append(fish1)
+reptile1 = Reptiles("Sydney the Snake", "snake", 3, "meat")
+ZOO_OCCUPANTS.append(reptile1)
+bird1 = Birds("Molly the Macaw", "macaw", 12, ["fruit", "vegetables", "pellets"])
+ZOO_OCCUPANTS.append(bird1)
+
+print("Here are our first occupants...\n")
 print(zebra1)
 zebra1.eat()
 zebra1.make_sound()
 
-zebra2 = Mammals("Zoe the Zebra", "zebra", 8, ["grass", "vegetables"], "savannah")
-ZOO_OCCUPANTS.append(zebra2)
 print(zebra2)
-zebra2.eat()
-zebra2.make_sound()
 
-fish1 = Fish("Sam the Shark", "shark", 15, "fish")
-ZOO_OCCUPANTS.append(fish1)
 print(fish1)
 fish1.eat()
 fish1.make_sound()
 
-
-reptile1 = Reptiles("Sydney the Snake", "snake", 3, "meat")
-ZOO_OCCUPANTS.append(reptile1)
 print(reptile1)
 reptile1.eat()
+print(f"\n{reptile1.name} took a hit...")
 reptile1.health = 50
+reptile1.health_report()
+print(f"{reptile1.name} will have a sleep...")
 reptile1.sleep()
+reptile1.health_report()
 reptile1.make_sound()
 
-
-bird1 = Birds("Molly the Macaw", "macaw", 12, ["fruit", "vegetables", "pellets"])
-ZOO_OCCUPANTS.append(bird1)
+print(f"A bit about bird1 - '{bird1.name}")
 print(bird1)
 bird1.eat()
+print("Having a feed...")
+print(bird1)
 bird1.sleep()
 bird1.make_sound()
 
+
+
+print(Fore.GREEN + f"\n\nZoo occupants are now  : \n")
+print(Style.RESET_ALL)
 print_zoo_occupants()
 
-print(f"Zoo occupants are now saved as : \n{ZOO_OCCUPANTS}")
+# ENCLOSURES
 
-print("Trying ** FAIL ** options...")
+print(Fore.BLUE + "\n\nNow setting up some enclosures for our zoo...")
+print(Style.RESET_ALL)
+savannah1 = Enclosure("A New Savannah", 45, "savannah")
+ADDED_ENCLOSURES.append(savannah1)
+savannah2 = Enclosure("A Slightly Bigger Savannah", 65, "savannah")
+ADDED_ENCLOSURES.append(savannah2)
+print('\nPlaying around with a terrarium...\n')
+terrarium1 = Enclosure("Snake Space", 10, "terrarium")
+ADDED_ENCLOSURES.append(terrarium1)
+print(terrarium1.report_status())
+print(terrarium1.list_animals())
 
+
+# FAIL options with try:except...
+
+
+
+
+# ASSIGNING to environments
+
+print(Fore.BLUE + "\nNow assigning animals to enclosures...\n")
+print(Style.RESET_ALL)
+vet1.assign_to_enclosure(zebra2, savannah1)
+vet1.assign_to_enclosure(zebra1, savannah1)
+
+print(Fore.GREEN + "An update on savannah1...\n")
+print(Style.RESET_ALL)
+print(f"After adding 2 zebras to savannah 1 '{savannah1.name}'...")
+print(f"{savannah1.name} contains : {savannah1.current_species}")
+print(f"This comprises...\n{savannah1.animal_count} animals of this type.")
+
+print(Fore.BLUE + f"\nNow showing what our zoo currently holds...")
+print(Style.RESET_ALL)
+print(f"The zoo now has {len(ZOO_OCCUPANTS)} animals, which are specifically...\n")
+for animal in ZOO_OCCUPANTS:
+    print(animal)
+
+vet1.assign_to_enclosure(zebra3, savannah1)
+print("Ziggy the Zebra now added to savannah1...\n")
+vet1.assign_to_enclosure(zebra5, savannah2)
+print("Zeek the Zebra now added to savannah2...\n")
+print(Fore.WHITE + f"The zoo now has {len(ZOO_OCCUPANTS)} animals, which are specifically...\n")
+print(Style.RESET_ALL)
+print_zoo_occupants()
+
+print("\nAn update on savannah1...\n")
+print(f"After adding a zebra to savannahh 1...")
+print(f"savannah1 contains : {savannah1.current_species}")
+print(f"This comprises...\n{savannah1.animal_count} animals of this type.")
+print(f"\nNow moving a zebra, after checking and restoring health...\n")
+zebra3.health_report()
+zebra3.eat()
+zebra3.health_report()
+print(Fore.BLUE + "\nMoving a zebra from savannah1 to savannah2...\n")
+print(Style.RESET_ALL)
+vet1.move_animal(zebra3, savannah1, savannah2)
+print(Fore.GREEN + "\nAn update on savannah2...\n")
+print(Style.RESET_ALL)
+print(f"After moving a zebra from savannah1...")
+print(f"savannah2 '{savannah2.name}' now contains : {savannah2.current_species}")
+print(f"This comprises...\n{savannah2.animal_count} animals of this type.\n")
+print(Fore.GREEN + "\nAn update on savannah1...\n")
+print(Style.RESET_ALL)
+print(f"savannah1 contains : {savannah1.current_species}")
+print(f"This comprises...\n{savannah1.animal_count} animals of this type.\n")
+
+
+print(Fore.RED + "\n\nTrying ** FAIL ** options...")
+print(Style.RESET_ALL)
 try:
     bird2 = Birds("Peter the Pigeon", "pigeon", 12, ["fruit", "vegetables", "meat"])
 except ValueError:
@@ -120,86 +229,46 @@ try:
 except ValueError:
     print("\nERROR in environment setup....\nI'm afraid this environment isn't set-up correctly to fit the zoo\n")
 
-
-print('\nPlaying around with a terrarium...\n')
-
-terrarium1 = Enclosure("Snake Space", 10, "terrarium")
-ADDED_ENCLOSURES.append(terrarium1)
-print(terrarium1.report_status())
-print(terrarium1.list_animals())
-
-
-# Allocation to environments
-
 try:
     amphibious1 = Enclosure("a pool and a bank", 20, "amphibious")
 except:
     print("Unable to set up this enclosure")
 
-print("Trying to assign animals...\n")
-savannah1 = Enclosure("A New Savannah", 45, "savannah")
-ADDED_ENCLOSURES.append(savannah1)
-savannah1.assign_animal(zebra2)
-savannah1.assign_animal(zebra1)
 try:
     savannah1.assign_animal(bird1)
 except ValueError:
     print("\nERROR in environment assignment....\nI'm afraid this environment isn't suitable for a bird\n")
 
-print("An update on savannah1...\n")
-print(f"After adding 2 zebras to savannahh 1...")
-print(f"savannah1 contains : {savannah1.current_species}")
-print(f"This comprises...\n{savannah1.animal_count} animals of this type.")
-print(f"The zoo now has {len(ZOO_OCCUPANTS)} animals, which are specifically...\n")
-for animal in ZOO_OCCUPANTS:
-    print(animal)
+try:
+    zebra3.health = 50
+    vet1.move_animal(zebra3, savannah1, savannah2)
+except ValueError:
+    print("Sorry - you cannot move a sick animal.")
 
-
-savannah2 = Enclosure("A Slightly Bigger Savannah", 65, "savannah")
-ADDED_ENCLOSURES.append(savannah2)
-zebra3 = Mammals("Ziggy the Zebra", "zebra", 20, ["grass", "vegetables"], "savannah")
-zebra4 = Mammals("Zilda the Zebra", "zebra", 16, ["grass", "vegetables"], "savannah")
-zebra5 = Mammals("Zeek the Zebra", "zebra", 14, ["grass", "vegetables"], "savannah")
-ZOO_OCCUPANTS.append(zebra3)
-vet1.assign_to_enclosure(zebra3, savannah1)
-print("Ziggy the Zebra now added...\n")
-print(f"The zoo now has {len(ZOO_OCCUPANTS)} animals, which are specifically...\n")
-for animal in ZOO_OCCUPANTS:
-    print(animal)
-print("An update on savannah1...\n")
-print(f"After adding a zebra to savannahh 1...")
-print(f"savannah1 contains : {savannah1.current_species}")
-print(f"This comprises...\n{savannah1.animal_count} animals of this type.")
-print(f"\nNow moving a zebra...\n")
-vet1.move_animal(zebra3, savannah1, savannah2)
-print("An update on savannah2...\n")
-print(f"After moving a zebras from savannah1...")
-print(f"savannah2 now contains : {savannah2.current_species}")
-print(f"This comprises...\n{savannah2.animal_count} animals of this type.\n")
-
-print("\nAn update on savannah1...\n")
-print(f"savannah1 contains : {savannah1.current_species}")
-print(f"This comprises...\n{savannah1.animal_count} animals of this type.\n")
+    zebra2.health -= 10
+    try:
+        vet1.move_animal(zebra2, savannah1, savannah2)
+    except:
+        print(f"Couldn't move zebra 2 ({zebra2.name}), as health < 100%\n")
 
 #remove an animal from an enclosure
-print(Fore.RED + f"Now using staff to remove an animal from an enclosure...\n")
+print(Fore.BLUE + f"Now using staff (vet1)to remove an animal (zebra5 - '{zebra5.name}') from an enclosure (savannah2)...\n")
 print(Style.RESET_ALL)
-vet1.remove_animal(zebra3, savannah2)
-print("An update on savannah1...\n")
-print(f"savannah1 contains : {savannah1.current_species}")
-print(f"This comprises...\n{savannah1.animal_count} animals of this type.")
-print(f"\nNow moving a zebra...\n")
-print("An update on savannah2...\n")
+vet1.remove_animal(zebra5, savannah2)
+print(Fore.GREEN + "An update on savannah2...\n")
+print(Style.RESET_ALL)
 print(f"savannah2 now contains : {savannah2.current_species}")
+print(savannah2)
 print(f"This comprises...\n{savannah2.animal_count} animals of this type.\n")
 print(f"The zoo now has {len(ZOO_OCCUPANTS)} animals, which are specifically...\n")
-for animal in ZOO_OCCUPANTS:
-    print(animal)
-print("The enclosure status....\n")
+print_zoo_occupants()
+
+print(Fore.BLUE + "\nThe enclosure status....\n")
+print(Style.RESET_ALL)
 print(savannah1.report_status())
 print(savannah2.report_status())
 
-print(Fore.RED + "\nTrying to move animals to an uncleaned enclsure...\n")
+print(Fore.RED + "\nTrying to move animals to an uncleaned enclosure...\n")
 print(Style.RESET_ALL)
 vet1.assign_to_enclosure(zebra4, savannah1)
 vet1.assign_to_enclosure(zebra5, savannah1)
@@ -208,10 +277,11 @@ print(savannah1.report_status())
 
 #HEALTH CHECK tasks
 if vet1.health_check(zebra1) == "treat":
-    print(f"Need to treat {zebra1.name}!")
+    print(Fore.BLUE + f"\nNeed to treat {zebra1.name}!")
     print(zebra1)
     print(f"\nNow treating {zebra1.name}...\n")
     vet1.treat(zebra1)
+    print(Style.RESET_ALL)
     print(f"\nAfter treatment of {zebra1.name}...")
     print(zebra1)
 
@@ -226,7 +296,7 @@ print(savannah1.report_status())
 
 
 
-print(Fore.RED + f"Now a vet will do their tasks...")
+print(Fore.RED + f"\nNow a vet will do their tasks...")
 zebra1.health = 50
 zebra2.health = 50
 zebra3.health = 50
@@ -235,12 +305,13 @@ print(f"The zoo now has {len(ZOO_OCCUPANTS)} animals, which are specifically...\
 for animal in ZOO_OCCUPANTS:
     print(animal)
 vet1.do_daily_routines()
-print("\nTasks completed...\n")
+print(Fore.BLUE + "\nTasks completed by vet1...\nHere's an update...\n")
+print(Style.RESET_ALL)
 print(f"The zoo now has {len(ZOO_OCCUPANTS)} animals, which are specifically...\n")
 for animal in ZOO_OCCUPANTS:
     print(animal)
 
-print(Fore.GREEN + f"Listing zoo occupants by species")
+print(Fore.GREEN + f"\nListing zoo occupants by species")
 print(Style.RESET_ALL)
 list_animals_by_species()
 
@@ -254,19 +325,19 @@ zebra1.add_illness("layngitis", "Developed from too much whinnying", datetime.da
 print(zebra1)
 print(zebra1.illness)
 
-print(Fore.GREEN + f"Adding an INJURY to {zebra1.name}...")
+print(Fore.GREEN + f"\nAdding an INJURY to {zebra1.name}...")
 print(Style.RESET_ALL)
 zebra1.add_injury("Broken foreleg", "Developed from too much running", datetime.datetime.now(), "severe", "casting")
 print(zebra1)
 print(zebra1.injuries)
 
-print(Fore.GREEN + f"Adding ANOTHER INJURY to {zebra1.name}...")
+print(Fore.GREEN + f"\nAdding ANOTHER INJURY to {zebra1.name}...")
 print(Style.RESET_ALL)
 zebra1.add_injury("Broken hindleg", "Developed from running with a broken foreleg", datetime.datetime.now(), "severe", "surgery")
 print(zebra1)
 print(zebra1.injuries)
 
-print(Fore.GREEN + f"Adding BEHAVIOURAL PROBLEM to zebra1...")
+print(Fore.GREEN + f"\nAdding BEHAVIOURAL PROBLEM to zebra1...")
 print(Style.RESET_ALL)
 zebra1.add_behavioural_problem("Depression", "Miserable due to broken legs", datetime.datetime.now(), "moderate", "a few days off")
 print(zebra1)
@@ -278,3 +349,31 @@ print(Style.RESET_ALL)
 vet1.treat(zebra1)
 print(zebra1)
 zebra1.health_report()
+
+
+print(Fore.BLUE + "Now health report for the entire zoo AFTER vet1 active...")
+print(Style.RESET_ALL)
+health_report_for_zoo()
+
+print(Fore.GREEN + f"\nNow vet1 will treat all animals...")
+print(Style.RESET_ALL)
+vet1.do_daily_routines()
+health_report_for_zoo()
+
+print("Current staff....")
+for staff in ZOO_STAFF:
+    print(staff)
+
+print(Fore.BLUE + f"\nNow removing our janitor...")
+print(Style.RESET_ALL)
+if admin1 in ZOO_STAFF:
+    ZOO_STAFF.remove(admin1)
+print("And now the current staff is....")
+for staff in ZOO_STAFF:
+    print(staff)
+print("\n-----------------------------------------\n")
+
+print(Fore.GREEN + "That's all folks!!\n\nThanks so much for reviewing my programme.")
+print(Style.RESET_ALL)
+
+
