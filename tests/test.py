@@ -28,9 +28,13 @@ def create_animal2():
 def create_enclosure1():
     return Enclosure("A wet and dry space", 35, "amphibious")
 
+@pytest.fixture
+def create_enclosure2():
+    return Enclosure("The Snake Pit", 5, "terrarium")
 
 def test_veterinarian1(create_vet1):
     assert create_vet1.responsibilities == ["health checks", "treat animals", "move animals", "assign enclosure"]
+    assert "seals" in create_vet1.animals_can_treat
 
 def test_veterinarian2(create_vet2):
     assert "meerkats" in create_vet2.animals_can_treat
@@ -55,5 +59,10 @@ def test_animal2(create_animal2):
 def test_enclosure_1(create_enclosure1):
     assert create_enclosure1.animal_count == 0
     assert create_enclosure1.name == "A wet and dry space"
+
+def test_enclosure_2(create_enclosure2):
+    assert create_enclosure2.animal_count == 0
+    assert create_enclosure2.name == "The Snake Pit"
+    assert create_enclosure2.cleanliness == 100
 
 

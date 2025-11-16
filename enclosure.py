@@ -6,10 +6,13 @@ ID: 110484750
 Username: COCNJ001
 This is my own work as defined by the University's Academic Misconduct Policy.
 """
-from colorama import Fore, Back, Style
+
+# IMPORTS needed in the class
+from colorama import Fore, Style
 from animal import *
 
-
+# CONSTANTS and PRE-REQUISITESs for animal management and allocation
+# in a formal project, this would be a database connection so that it could be saved and modified
 MAX_HEALTH = 100
 MAX_CLEANLINESS = 100
 MAX_ZOO_SIZE = 1000
@@ -21,8 +24,7 @@ MAX_TERRARIUM = 10
 CURRENT_ZOO_SPACE = 0
 ADDED_ENCLOSURES = []
 
-
-
+# PARENT class definition
 class Enclosure:
     def __init__(self, name, size, environment_type):
         if CURRENT_ZOO_SPACE + size > MAX_ZOO_SIZE:
@@ -131,6 +133,7 @@ class Enclosure:
 
     #CLASS METHODS
 
+    # This reports status of the instantiated enclosure, for console output
     def report_status(self):
         return_string = f"The enclosure '{self.name}' is a {self.__environment_type}.\n"
         return_string += f"It's size is {self.size} units, and cleanliness is currently {self.cleanliness}%\n"
@@ -144,7 +147,7 @@ class Enclosure:
             return_string += f"The enclosure is CLOSED at present."
         return return_string
 
-
+    # This reports lists the occupants of the instantiated enclosure, for console output
     def list_animals(self):
         return_string = f"\nAnimal Count...\nThe enclosure '{self.name}' "
         if self.animal_count == 0:
@@ -154,11 +157,13 @@ class Enclosure:
         return_string += "--------------------"
         return return_string
 
+    # Allow assignment of an instantiated animal to an instantiated enclosure, for console output
     def assign_animal(self, animal):
         animal_group = animal.return_animal_type()
         environs = animal.confirm_poss_environs()
-        print(f"Attempting to place a {animal_group} usually enclosed in {environs}.")
+        print(f"Attempting to place a {animal_group} usually enclosed in {environs}.") # This just for console explanation of process
         print(f"This environment is a {self.environment_type}.")
+        # error handling to only allow appropriate animal assignments through
         if self.is_open_for_business == False:
             raise ValueError("This enclosure is not open for business.")
         if self.environment_type not in environs:
@@ -172,6 +177,9 @@ class Enclosure:
                 raise ValueError(f"Sorry - you cant place a {animal.species} in an enclosure with a {self.current_species}.")
         else:
             self.current_species = animal.species
+        # Now append the animal to the enclosure with population updates, noting that
+        # additional animals affect health of all occupants (i.e. health down by 10 points)
+        # and also decreases enclosure cleanliness by arbitrary amount.
         self.__population.append(animal)
         self.animal_count += 1
         animal.on_display = True

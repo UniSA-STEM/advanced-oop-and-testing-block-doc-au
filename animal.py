@@ -6,10 +6,11 @@ ID: 110484750
 Username: COCNJ001
 This is my own work as defined by the University's Academic Misconduct Policy.
 """
-# IMPORTS
-from colorama import Fore, Back, Style
 
-# Pre-requisites for animal management and allocation
+# IMPORTS
+from colorama import Fore, Style  # to allow couloured test in console output
+
+# CONSTANTS and PRE-REQUISITESs for animal management and allocation
 # in a formal project, this would be a database connection so that it could be saved and modified
 ALLOWABLE_FOODS = ["pellets", "fish_food", "fish", "meat", "fruit", "vegetables", "grass", "water"]
 REGISTERED_ANIMALS = {"parrot": "bird", "macaw": "bird", "shark": "aquatic", "angelfish": "aquatic", "snake": "reptile",
@@ -21,17 +22,21 @@ FOOD_BY_SPECIES = {"parrot": ["pellets", "fruit", "vegetables"], "macaw": ["pell
                    "seal": ["fish"], "penguin": ["fish"], "zebra": ["grass", "vegetables"], "turtle": ["fish_food", "vegetables"], "chimpanzee": ["meat", "fruit", "vegetables"]}
 SUITABLE_ENVIRONMENTS = {"mammal": ["savannah", "cage", "amphibious"], "aquatic": ["amphibious", "tank"], "bird": "cage", "reptile": "terrarium"}
 
-# Likely able to delete these once dictionary replacement completed
+# Likely able to delete these as dictionary replacement completed,
+# but kept for potential extension
 MAMMALS = ["lion", "tiger", "meerkat", "dolphin", "seal", "zebra", "chimpanzee"]
 AQUATIC = ["shark", "angelfish", "dolphin", "seal", "penguin", "turtle"]
 BIRDS = ["parrot", "macaw", "penguin"]
 REPTILES = ["snake", "lizard", "turtle"]
 ZOO_OCCUPANTS = []  # start with an empty zoo...
 
+# PARENT class definition
 class Animals:
     def __init__(self, name, species, age, dietary_needs):
+        # check is allowable animal
         if species not in REGISTERED_ANIMALS:
             raise ValueError("This is not a species allowed in this zoo.")
+        # check the foods are suitable for this animal before instantiating
         suitable_foods = []
         for key, value in FOOD_BY_SPECIES.items():
             if key == species:
@@ -41,9 +46,10 @@ class Animals:
             for item in dietary_needs:
                if item not in suitable_foods:
                    raise ValueError(f"{item} is not a food option suitable for a {species}")
-        else: # not a list of suitable foods but a single item
+        else: # not a [list] of suitable foods but a single item (str)
             if dietary_needs not in suitable_foods:
                 raise ValueError(f"{dietary_needs} is not a food option suitable for a {species}")
+        # check there is a viable age before instantiation (no upper limits at this stage)
         if age <= 0:
             raise ValueError("Age must be greater than zero.")
         self.__name = name
@@ -57,9 +63,6 @@ class Animals:
         self.__current_enclosure = None
         self.__being_treated = False
         self.__on_display = False
-
-
-
 
     # Define GETTERS
     def get_name(self):
@@ -136,7 +139,7 @@ class Animals:
     on_display = property(get_on_display, set_on_display)
 
 
-    # General class methods:
+    # General class methods - may be overridden :
 
     def eat(self):
         # print("\nAbout to eat...")
@@ -167,6 +170,7 @@ class Animals:
                return environs
         return None
 
+    # methods for recording illness, injury or behavioral issues of animal
     def add_illness(self, the_illness, notes, date, severity, treatment_plan):
         date_reported = date
         severity_level = str(severity)
@@ -218,6 +222,7 @@ class Animals:
         self.check_current_status()
         print(f"Just added behavioural problem : {the_problem}\n{self.behavioural_problems[the_problem]}")
 
+    # Check instance animal's current health staus - used after any move of animal etc.
     def check_current_status(self):
         if self.health <= 50:
             self.on_display = False
@@ -230,6 +235,7 @@ class Animals:
         if len(self.behavioural_problems) > 0:
             self.on_display = False
 
+    # Printable instance animal health report
     def health_report(self):
         print(Fore.RED + f"\nHEALTH REPORT on {self.name}")
         print(Fore.BLUE + f"Health : {self.health}%")
@@ -240,6 +246,8 @@ class Animals:
         print(f"Is on display : {self.on_display}")
         print("-------------------------------\n")
         print(Style.RESET_ALL)
+
+# SUB-CLASSES.... for polymorphism
 
 class Mammals(Animals):
     def __init__(self, name, species, age, dietary_needs, suitable_environment):
@@ -261,6 +269,7 @@ class Mammals(Animals):
 
     suitable_environment = property(get_suitable_environment)
 
+    # Species-specific noises
     def make_sound(self):
         if self.species in ["lion", "tiger"]:
             sound_character = "roars"
@@ -281,6 +290,7 @@ class Fish(Animals):
         super().__init__(name, species, age, dietary_needs)
         self.__suitable_environment = "aquarium"
 
+    # Overridden __str__ method
     def __str__(self):
         return_string = Fore.YELLOW + f"\n{self.name} is a {self.species}, in the aquatic & fish group.\n"
         return_string += Style.RESET_ALL + f"They are {self.age} years old, and health level is at {self.health}%\n"
@@ -305,6 +315,7 @@ class Reptiles(Animals):
         self.__dietary_needs = dietary_needs
         self.__suitable_environment = "terrarium"
 
+    # Overridden __str__ method
     def __str__(self):
         return_string = Fore.YELLOW + f"\n{self.name} is a {self.species}, in the reptile group.\n"
         return_string += Style.RESET_ALL + f"They are {self.age} years old, and health level is at {self.health}%\n"
@@ -328,6 +339,7 @@ class Birds(Animals):
         super().__init__(name, species, age, dietary_needs)
         self.__suitable_environment = "cage"
 
+    # Overridden __str__ method
     def __str__(self):
         return_string = Fore.YELLOW + f"\n{self.name} is a {self.species}, in the bird group.\n"
         return_string += Style.RESET_ALL + f"They are {self.age} years old, and health level is at {self.health}%\n"
@@ -346,6 +358,7 @@ class Birds(Animals):
 
     def make_sound(self):
         print(f"{self.name} goes 'cheep cheep' !")
+        return f"{self.name} goes 'cheep cheep' !" # for unit test
 
 
 

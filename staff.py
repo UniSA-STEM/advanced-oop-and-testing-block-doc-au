@@ -7,11 +7,12 @@ Username: COCNJ001
 This is my own work as defined by the University's Academic Misconduct Policy.
 """
 
+# IMPORTS - for consol;e colour printing and for used class method access
 from colorama import Fore, Back, Style
 from animal import ZOO_OCCUPANTS
 from enclosure import ADDED_ENCLOSURES
 
-
+# PARENT class definition
 class Staff:
     def __init__(self, name, date_employed):
         self.__name = name
@@ -31,7 +32,6 @@ class Staff:
     def get_is_active_staff(self):
         return self.__is_active_staff
 
-
     def get_date_employed(self):
         return self.__date_employed
 
@@ -44,7 +44,6 @@ class Staff:
         self.__is_active_staff = is_active_staff
 
     #Properties
-
     name = property(get_name, set_name)
     responsibilities = property(get_responsibilities)
     is_active_staff = property(get_is_active_staff, set_is_active_staff)
@@ -56,25 +55,31 @@ class Staff:
         print("Doing operational matters to keep the Zoo running smoothly.")
 
     def move_animal(self, animal, enclosure_from, enclosure_to):
+        # check to see if staff authorised before proceeding
         if self.__class__.__name__ == "Operations":
             raise ValueError("An operations person is unable to assign to an enclosure.")
-        print(f"About to move an animal from an enclosure containing : {enclosure_from.population}...\n")
+        print(f"About to move an animal from an enclosure containing : {enclosure_from.population}...\n") # just for output readability
+        # can't move an animal if it's not in the enclosure
         if animal not in enclosure_from.population:
             raise ValueError(f"There isn't a {animal.species} in the enclosure '{enclosure_from.name}' to move.")
+        # can't move an animal if it's to the wrong enclosure type
         if enclosure_to.environment_type != enclosure_from.environment_type:
             raise ValueError("The enclosure types aren't the same - cannot move the animal between them.")
+        # can't move an animal if it's sick
         if animal.health < 100:
             raise ValueError("The animal health is less than 100%, so cant be moved.")
         moving_animal = animal
         enclosure_from.population.remove(animal)
-        enclosure_from.animal_count -= 1
+        enclosure_from.animal_count -= 1 # update the former enclosure's population
         enclosure_to.assign_animal(moving_animal)
         moving_animal.on_display = False
 
     def remove_animal(self, animal, enclosure):
+        # check to see if staff authorised before proceeding
         if self.__class__.__name__ == "Operations":
             raise ValueError("An operations person is unable to assign to an enclosure.")
-        print(f"About to remove an animal from an enclosure containing : {enclosure.current_species}s...\n")
+        print(f"About to remove an animal from an enclosure containing : {enclosure.current_species}s...\n") # again for output readability
+        # can't move an animal if it's not there !
         if animal not in enclosure.population:
             raise ValueError(f"There isn't a {animal.species} in the enclosure '{enclosure.name}' to move.")
         moving_animal = animal
@@ -85,30 +90,36 @@ class Staff:
         animal.current_enclosure = None
 
     def assign_to_enclosure(self, animal, enclosure):
+        # check to see if staff authorised before proceeding
         if self.__class__.__name__ == "Operations":
             raise ValueError("An operations person is unable to assign to an enclosure.")
-        enclosure.assign_animal(animal)
+        enclosure.assign_animal(animal)  # use the method from Enclosures as this allows updating of enclosure internally
 
 
     def feed_animal(self, animal):
+        # check to see if staff authorised before proceeding - overridden in sub-classes
         if self.__class__.__name__ == "Operations":
             raise ValueError("An operations person is unable to feed the animals.")
         animal.eat()
 
     def health_check(self, animal):
+        # check to see if staff authorised before proceeding - overridden in sub-classes
         if self.__class__.__name__ == "Operations":
             raise ValueError("An operations person is unable to undertake health checks.")
 
     def treat(self, animal):
+        # check to see if staff authorised before proceeding - overridden in sub-classes
         if self.__class__.__name__ == "Operations":
             raise ValueError("An operations person is unable to treat animals.")
 
     def clean_enclosure(self, enclosure):
+        # check to see if staff authorised before proceeding
         if self.__class__.__name__ == "Operations":
             raise ValueError("An operations person is unable to clean enclosures.")
         enclosure.cleanliness = 100
         enclosure.is_open_for_business = True
 
+    # This could be extended for additional duties eg admin / reception / retail staff added
     def do_daily_routines(self):
         if "feed animals" in self.responsibilities:
             for animal in ZOO_OCCUPANTS:
@@ -121,6 +132,7 @@ class Staff:
             for enclosure in ADDED_ENCLOSURES:
                 self.clean_enclosure(enclosure)
 
+# SUB-CLASSES.... for polymorphism
 
 class Veterinarian(Staff):
     def __init__(self, name, date_employed, animals_can_treat):
@@ -181,6 +193,7 @@ class Veterinarian(Staff):
     date_employed = property(get_date_employed)
     animals_can_treat = property(get_animals_can_treat, set_animals_can_treat)
 
+    # Methods specific for a veterinarian
     def health_check(self, animal):
         if animal.species not in self.animals_can_treat:
             raise ValueError(f"This vet cannot undertake health checks on {animal.species}s.")

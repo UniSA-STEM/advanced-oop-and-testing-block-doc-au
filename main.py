@@ -7,7 +7,7 @@ Username: COCNJ001
 This is my own work as defined by the University's Academic Misconduct Policy.
 """
 
-# GitHub Classroom repo = https://github.com/UniSA-STEM/advanced-oop-and-testing-block-doc-au.git
+# For reviewer... GitHub Classroom repo = https://github.com/UniSA-STEM/advanced-oop-and-testing-block-doc-au.git
 
 #IMPORTS
 from colorama import Fore, Back, Style
@@ -18,19 +18,22 @@ from staff import *
 
 # Constants and global variable for this class
 MAX_HEALTH = 100
-MAX_CLEANLINESS = 100
-ZOO_STAFF = []
+MAX_CLEANLINESS = 100 # arbitrary figures
+ZOO_STAFF = [] # nil employed initially
 
 # MAIN class report functions
 
-
+# I trust this is self-explanatory
 def print_zoo_occupants():
     print(f"The specific animals currently in the zoo are...")
     for occupants in ZOO_OCCUPANTS:
         print(occupants)
+    # but report if nil listed as yet
     if len(ZOO_OCCUPANTS) == 0:
         print("No Zoo occupants as yet\n")
 
+# For each species of allowable animals, see if there are any in the zoo
+# and increment the count if so, before printed summary
 def list_animals_by_species():
     for animal_species in REGISTERED_ANIMALS:
         species_count = 0
@@ -44,6 +47,8 @@ def list_animals_by_species():
                 print(f" There are {species_count} {animal_species}s")
     print(f"\nTotal zoo occupants is {len(ZOO_OCCUPANTS)}\n")
 
+# Provide a printed summary of the enclosures added to the zoo at that point
+# and print their status using __str__ method for the enclosure
 def list_all_enclosures():
     print(Style.RESET_ALL)
     if len(ADDED_ENCLOSURES) == 0:
@@ -54,6 +59,8 @@ def list_all_enclosures():
             print(f"'{enclosure.name}'")
             print(enclosure)
 
+# Sequentially for every animal in the zoo, iterate through and
+# summarise their health attributes.
 def health_report_for_zoo():
     print(Fore.RED + f"\nHEALTH REPORT for the Zoo...")
     for animal in ZOO_OCCUPANTS:
@@ -68,8 +75,8 @@ def health_report_for_zoo():
     print(Style.RESET_ALL)
 
 
-
-# BASIC testing code... a 'walk-through'
+# MAIN executable code...
+# Basically a 'walk-through'
 
 
 print(Fore.GREEN + "--------------------------")
@@ -93,9 +100,10 @@ admin1 = Operations("Jeff the Janitor", datetime.datetime(2019, 12, 24))
 print(admin1)
 ZOO_STAFF.append(admin1)
 
+# ANIMALS added and tested
 print(Fore.BLUE + "Now procuring some critters for our zoo...")
 print(Style.RESET_ALL)
-
+# Sequentially instantiate some animals
 zebra1 = Mammals("Zane the Zebra", "zebra", 10, ["grass", "vegetables"], "savannah")
 ZOO_OCCUPANTS.append(zebra1)
 zebra2 = Mammals("Zoe the Zebra", "zebra", 8, ["grass", "vegetables"], "savannah")
@@ -113,6 +121,7 @@ ZOO_OCCUPANTS.append(reptile1)
 bird1 = Birds("Molly the Macaw", "macaw", 12, ["fruit", "vegetables", "pellets"])
 ZOO_OCCUPANTS.append(bird1)
 
+# Provide an up-to-date summary of animals
 print("Here are our first occupants...\n")
 print(zebra1)
 zebra1.eat()
@@ -124,6 +133,7 @@ print(fish1)
 fish1.eat()
 fish1.make_sound()
 
+# Challenge the health of an animal and recover with a sleep
 print(reptile1)
 reptile1.eat()
 print(f"\n{reptile1.name} took a hit...")
@@ -134,6 +144,7 @@ reptile1.sleep()
 reptile1.health_report()
 reptile1.make_sound()
 
+# Test some animal instance methods
 print(f"A bit about bird1 - '{bird1.name}")
 print(bird1)
 bird1.eat()
@@ -142,13 +153,12 @@ print(bird1)
 bird1.sleep()
 bird1.make_sound()
 
-
-
+# Provide an up-to-date summary of animals
 print(Fore.GREEN + f"\n\nZoo occupants are now  : \n")
 print(Style.RESET_ALL)
 print_zoo_occupants()
 
-# ENCLOSURES
+# ENCLOSURES set-up and testing
 
 print(Fore.BLUE + "\n\nNow setting up some enclosures for our zoo...")
 print(Style.RESET_ALL)
@@ -162,13 +172,7 @@ ADDED_ENCLOSURES.append(terrarium1)
 print(terrarium1.report_status())
 print(terrarium1.list_animals())
 
-
-# FAIL options with try:except...
-
-
-
-
-# ASSIGNING to environments
+# ENVIRONMENT instantiation and animal assignment testing
 
 print(Fore.BLUE + "\nNow assigning animals to enclosures...\n")
 print(Style.RESET_ALL)
@@ -203,6 +207,7 @@ print(f"\nNow moving a zebra, after checking and restoring health...\n")
 zebra3.health_report()
 zebra3.eat()
 zebra3.health_report()
+# Try moving some enclosed animals
 print(Fore.BLUE + "\nMoving a zebra from savannah1 to savannah2...\n")
 print(Style.RESET_ALL)
 vet1.move_animal(zebra3, savannah1, savannah2)
@@ -216,6 +221,7 @@ print(Style.RESET_ALL)
 print(f"savannah1 contains : {savannah1.current_species}")
 print(f"This comprises...\n{savannah1.animal_count} animals of this type.\n")
 
+# Known **FAILING**  options with try:except blocks ...
 
 print(Fore.RED + "\n\nTrying ** FAIL ** options...")
 print(Style.RESET_ALL)
@@ -251,7 +257,7 @@ except ValueError:
     except:
         print(f"Couldn't move zebra 2 ({zebra2.name}), as health < 100%\n")
 
-#remove an animal from an enclosure
+# Testing removal of an animal from an enclosure
 print(Fore.BLUE + f"Now using staff (vet1)to remove an animal (zebra5 - '{zebra5.name}') from an enclosure (savannah2)...\n")
 print(Style.RESET_ALL)
 vet1.remove_animal(zebra5, savannah2)
@@ -263,11 +269,13 @@ print(f"This comprises...\n{savannah2.animal_count} animals of this type.\n")
 print(f"The zoo now has {len(ZOO_OCCUPANTS)} animals, which are specifically...\n")
 print_zoo_occupants()
 
+# Print a status update
 print(Fore.BLUE + "\nThe enclosure status....\n")
 print(Style.RESET_ALL)
 print(savannah1.report_status())
 print(savannah2.report_status())
 
+# Try to move an animal to unclean enclosure to see it blocked
 print(Fore.RED + "\nTrying to move animals to an uncleaned enclosure...\n")
 print(Style.RESET_ALL)
 vet1.assign_to_enclosure(zebra4, savannah1)
@@ -294,7 +302,7 @@ print(Fore.GREEN + "The enclosure status....\n")
 print(Style.RESET_ALL)
 print(savannah1.report_status())
 
-
+# VET tasks - daily routine (specifically health checks on all authorised animals
 
 print(Fore.RED + f"\nNow a vet will do their tasks...")
 zebra1.health = 50
@@ -311,6 +319,7 @@ print(f"The zoo now has {len(ZOO_OCCUPANTS)} animals, which are specifically...\
 for animal in ZOO_OCCUPANTS:
     print(animal)
 
+# Again, print a status update, to confirm improved HEALTH of animals
 print(Fore.GREEN + f"\nListing zoo occupants by species")
 print(Style.RESET_ALL)
 list_animals_by_species()
@@ -319,6 +328,7 @@ print(Fore.GREEN + f"Listing enclosures...")
 print(Style.RESET_ALL)
 list_all_enclosures()
 
+# Adding ILLNESS, INJURY or BEHAVIOURAL PROBLEM to test and summarise
 print(Fore.GREEN + f"Adding an ILLNESS to {zebra1.name}...")
 print(Style.RESET_ALL)
 zebra1.add_illness("layngitis", "Developed from too much whinnying", datetime.datetime.now(), "mild", "antibiotics")
@@ -344,13 +354,14 @@ print(zebra1)
 print(zebra1.behavioural_problems)
 zebra1.health_report()
 
+# TREAT the animal to see all problems resolved
 print(Fore.GREEN + f"\nNow TREATING all problems for {zebra1.name}...")
 print(Style.RESET_ALL)
 vet1.treat(zebra1)
 print(zebra1)
 zebra1.health_report()
 
-
+# Proive another update...
 print(Fore.BLUE + "Now health report for the entire zoo AFTER vet1 active...")
 print(Style.RESET_ALL)
 health_report_for_zoo()
@@ -360,10 +371,12 @@ print(Style.RESET_ALL)
 vet1.do_daily_routines()
 health_report_for_zoo()
 
+# STAFF list-out and summary, using staff __str__ methods
 print("Current staff....")
 for staff in ZOO_STAFF:
     print(staff)
 
+# Remove a staff-member and check...
 print(Fore.BLUE + f"\nNow removing our janitor...")
 print(Style.RESET_ALL)
 if admin1 in ZOO_STAFF:
