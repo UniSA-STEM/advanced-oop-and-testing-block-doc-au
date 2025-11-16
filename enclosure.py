@@ -6,7 +6,7 @@ ID: 110484750
 Username: COCNJ001
 This is my own work as defined by the University's Academic Misconduct Policy.
 """
-
+from colorama import Fore, Back, Style
 from animal import *
 
 
@@ -19,6 +19,8 @@ MAX_AMPHIBIOUS = 40
 MAX_AQUARIUM = 20
 MAX_TERRARIUM = 10
 CURRENT_ZOO_SPACE = 0
+ADDED_ENCLOSURES = []
+
 
 
 class Enclosure:
@@ -45,8 +47,20 @@ class Enclosure:
         self.__environment_type = environment_type
         self.__cleanliness = 100
         self.__animal_count = 0
-        self.__currently_contains = ""
+        self.__current_species = ""
+        self.__population = []
         self.__is_open_for_business = True
+
+    def __str__(self):
+        return_string = f"Environment type : {self.environment_type}, holding {self.current_species}s\n"
+        return_string += f"Cleanliness : {self.cleanliness}\n"
+        return_string += f"Size : {self.size}\n"
+        return_string += f"Animal Count : {self.animal_count}\n"
+        if self.is_open_for_business:
+            return_string += f"'{self.name}' is " + Fore.GREEN + "OPEN\n" + Fore.WHITE
+        else:
+            return_string += f"'{self.name}' is " + Fore.RED + "CLOSED\n" + Fore.WHITE
+        return return_string
 
     # initialise getters and setters
 
@@ -66,14 +80,18 @@ class Enclosure:
     def get_compatible_species(self):
         return self.__compatible_species
 
-    def get_currently_contains(self):
-        return self.__currently_contains
+    def get_current_species(self):
+        return self.__current_species
 
     def get_animal_count(self):
         return self.__animal_count
 
+    def get_population(self):
+        return self.__population
+
     def get_is_open_for_business(self):
         return self.__is_open_for_business
+
 
     # SETTERS
     def set_name(self, name):
@@ -84,8 +102,11 @@ class Enclosure:
         if cleanliness >= 0 and cleanliness <= 100:
             self.__cleanliness = cleanliness
 
-    def set_currently_contains(self, currently_contains):
-        self.__currently_contains = currently_contains
+    def set_current_species(self, current_species):
+        self.__current_species = current_species
+
+    def set_population(self, population):
+        self.__population = population
 
     def set_animal_count(self, animal_count):
         self.__animal_count = animal_count
@@ -100,8 +121,9 @@ class Enclosure:
     environment_type = property(get_environment_type)
     cleanliness = property(get_cleanliness, set_cleanliness)
     compatible_species = property(get_compatible_species)
-    currently_contains = property(get_currently_contains, set_currently_contains)
+    current_species = property(get_current_species, set_current_species)
     animal_count = property(get_animal_count, set_animal_count)
+    population = property(get_population, set_population)
     is_open_for_business = property(get_is_open_for_business, set_is_open_for_business)
 
 
@@ -115,7 +137,7 @@ class Enclosure:
         if self.animal_count == 0:
             return_string += f"The enclosure is empty.\n"
         else:
-            return_string += f"The enclosure currently contains...\n{self.currently_contains} and the count is {self.animal_count}.\n"
+            return_string += f"The enclosure currently contains...\n{self.current_species}s and the count is {self.animal_count}.\n"
         if self.is_open_for_business:
             return_string += f"The enclosure is open for business."
         else:
@@ -141,15 +163,40 @@ class Enclosure:
             raise ValueError("This enclosure is not open for business.")
         if self.environment_type not in environs:
            raise ValueError(f"The enclosure '{self.name}' is not suitable for a {animal_group}.")
+        if self.cleanliness <= 50:
+            print(f"The enclosure '{self.name}' needs a clean!!")
+            self.is_open_for_business = False
+            raise ValueError(f"The enclosure '{self.name}' is not clean enough to accept an animal.")
         if self.animal_count > 0:
-            if animal.species != self.currently_contains:
-                raise ValueError(f"Sorry - you cant place a {animal.species} in an enclsure with a {self.currently_contains}.")
+            if animal.species != self.current_species:
+                raise ValueError(f"Sorry - you cant place a {animal.species} in an enclosure with a {self.current_species}.")
         else:
-            self.currently_contains = animal.species
+            self.current_species = animal.species
+        self.__population.append(animal)
         self.animal_count += 1
         animal.on_display = True
+        if self.animal_count > 0:
+            for animal in self.population:
+                animal.health -= 10
+        self.cleanliness -= 10
+        if self.cleanliness <= 50:
+            self.is_open_for_business = False
 
 
+    def remove_animal(self, animal):
+        animal_group = animal.return_animal_type()
+        environs = animal.confirm_poss_environs()
+        print(f"Trying to remove a {animal_group} usually enclosed in {environs}.")
+        print(f"This environment is a {self.environment_type}.")
+
+        if self.animal_count == 0:
+            if animal.species != self.current_species:
+                raise ValueError(f"Sorry - you cant place a {animal.species} in an enclosure with a {self.current_species}.")
+        else:
+            self.current_species = animal.species
+        self.__population.append(animal)
+        self.animal_count += 1
+        animal.on_display = True
 
 
 

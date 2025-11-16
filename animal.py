@@ -6,6 +6,8 @@ ID: 110484750
 Username: COCNJ001
 This is my own work as defined by the University's Academic Misconduct Policy.
 """
+# IMPORTS
+from colorama import Fore, Back, Style
 
 # Pre-requisites for animal management and allocation
 # in a formal project, this would be a database connection so that it could be saved and modified
@@ -50,8 +52,13 @@ class Animals:
         self.__age = age
         self.__dietary_needs = dietary_needs
         self.__health = 100
+        self.__illness = {}
+        self.__injuries = {}
+        self.__behavioural_problems = {}
         self.__being_treated = False
         self.__on_display = False
+
+
 
 
     # Define GETTERS
@@ -70,6 +77,15 @@ class Animals:
     def get_health(self):
         return self.__health
 
+    def get_illness(self):
+        return self.__illness
+
+    def get_injuries(self):
+        return self.__injuries
+
+    def get_behavioural_problems(self):
+        return self.__behavioural_problems
+
     def get_being_treated(self):
         return self.__being_treated
 
@@ -82,8 +98,16 @@ class Animals:
             self.__name = name
 
     def set_health(self, health):
-        if health is not None:
-            self.__health = health
+        self.__health = health
+
+    def set_illness(self, illness):
+        self.__illness = illness
+
+    def set_injuries(self, injuries):
+        self.__injuries = injuries
+
+    def set_behavioural_problems(self, behavioural_problems):
+        self.__behavioural_problems = behavioural_problems
 
     def set_being_treated(self, being_treated):
         self.__being_treated = being_treated
@@ -98,6 +122,9 @@ class Animals:
     age = property(get_age)
     dietary_needs = property(get_dietary_needs)
     health = property(get_health, set_health)
+    illness = property(get_illness, set_illness)
+    behavioural_problems = property(get_behavioural_problems, set_behavioural_problems)
+    injuries = property(get_injuries, set_injuries)
     being_treated = property(get_being_treated, set_being_treated)
     on_display = property(get_on_display, set_on_display)
 
@@ -133,6 +160,79 @@ class Animals:
                return environs
         return None
 
+    def add_illness(self, the_illness, notes, date, severity, treatment_plan):
+        date_reported = date
+        severity_level = str(severity)
+        self.illness.setdefault(the_illness, []).append(notes)
+        self.illness.setdefault(the_illness, []).append(date_reported)
+        self.illness.setdefault(the_illness, []).append(severity_level)
+        self.illness.setdefault(the_illness, []).append(treatment_plan)
+        if severity == "mild":
+            self.health -= 10
+        elif severity == "moderate":
+            self.health -= 20
+        else:
+            self.health -= 30
+        self.being_treated = True
+        self.check_current_status()
+        print(f"Just added illness : {the_illness}\n{self.illness[the_illness]}")
+
+    def add_injury(self, the_injury, notes, date, severity, treatment_plan):
+        date_reported = date
+        severity_level = str(severity)
+        self.injuries.setdefault(the_injury, []).append(notes)
+        self.injuries.setdefault(the_injury, []).append(date_reported)
+        self.injuries.setdefault(the_injury, []).append(severity_level)
+        self.injuries.setdefault(the_injury, []).append(treatment_plan)
+        if severity == "mild":
+            self.health -= 10
+        elif severity == "moderate":
+            self.health -= 20
+        else:
+            self.health -= 30
+        self.being_treated = True
+        self.check_current_status()
+        print(f"Just added injury : {the_injury}\n{self.injuries[the_injury]}")
+
+    def add_behavioural_problem(self, the_problem, notes, date, severity, treatment_plan):
+        date_reported = date
+        severity_level = str(severity)
+        self.behavioural_problems.setdefault(the_problem, []).append(notes)
+        self.behavioural_problems.setdefault(the_problem, []).append(date_reported)
+        self.behavioural_problems.setdefault(the_problem, []).append(severity_level)
+        self.behavioural_problems.setdefault(the_problem, []).append(treatment_plan)
+        if severity == "mild":
+            self.health -= 10
+        elif severity == "moderate":
+            self.health -= 20
+        else:
+            self.health -= 30
+        self.being_treated = True
+        self.check_current_status()
+        print(f"Just added behavioural problem : {the_problem}\n{self.behavioural_problems[the_problem]}")
+
+    def check_current_status(self):
+        if self.health <= 50:
+            self.on_display = False
+        if self.being_treated:
+            self.on_display = False
+        if len(self.injuries) > 0:
+            self.on_display = False
+        if len(self.illness) > 0:
+            self.on_display = False
+        if len(self.behavioural_problems) > 0:
+            self.on_display = False
+
+    def health_report(self):
+        print(Fore.RED + f"\nHEALTH REPORT on {self.name}")
+        print(Fore.BLUE + f"Health : {self.health}%")
+        print(f"Illnesses : {self.illness}")
+        print(f"Injuries : {self.injuries}")
+        print(f"Behavioural problems :  : {self.behavioural_problems}")
+        print(f"Is under treatment : {self.being_treated}")
+        print(f"Is on display : {self.on_display}")
+        print("-------------------------------\n")
+        print(Style.RESET_ALL)
 
 class Mammals(Animals):
     def __init__(self, name, species, age, dietary_needs, suitable_environment):
@@ -142,7 +242,7 @@ class Mammals(Animals):
     def __str__(self):
         return_string = f"\n{self.name} is a {self.species}, in the mammal group.\n"
         return_string += f"They are {self.age} years old, and health level is at {self.health}%\n"
-        return_string += f"{self.name} eats : {self.dietary_needs} and lives in a {self.__suitable_environment}.\n"
+        return_string += f"{self.name} eats : {self.dietary_needs} and lives in a {self.suitable_environment}.\n"
         return_string += f"STATUS :\nHealth = {self.health}%, being treated = {self.being_treated}, and on display = {self.on_display}"
         return return_string
 
